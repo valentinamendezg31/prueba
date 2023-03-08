@@ -1,0 +1,42 @@
+describe('Búsqueda de vuelos', () => {
+  it('Buscar vuelos de Bogotá a Cali', () => {
+    // abrir sitio web de la aerolínea wingo
+    cy.visit('https://www.wingo.com/');
+
+    // hacer clic en el botón "Buscar vuelos"
+    cy.get('button#buscarVuelos').click();
+
+    // seleccionar Bogotá como ciudad de origen
+    cy.get('input#ciudadOrigen').type('Bogotá').wait(500);
+    cy.get('ul#ui-id-1 li:first-child').click();
+
+    // seleccionar Cali como ciudad de destino
+    cy.get('input#ciudadDestino').type('Cali').wait(500);
+    cy.get('ul#ui-id-2 li:first-child').click();
+
+    // seleccionar fecha de ida y regreso
+    const fechaIda = Cypress.moment().add(2, 'weeks').format('DD/MM/YYYY');
+    const fechaRegreso = Cypress.moment().add(1, 'months').add(2, 'weeks').format('DD/MM/YYYY');
+    cy.get('input#fechaIda').type(fechaIda);
+    cy.get('input#fechaRegreso').type(fechaRegreso);
+
+    // indicar que se viajan dos adultos
+    cy.get('select#adultos').select('2');
+
+    // hacer clic en el botón "Buscar vuelos"
+    cy.get('button#buscarVuelos').click();
+
+    // seleccionar vuelo más económico de ida y regreso
+    cy.get('div#ida ul.listaVuelos li:first-child button.btnSeleccionar').click();
+    cy.get('div#vuelta ul.listaVuelos li:first-child button.btnSeleccionar').click();
+
+    // completar datos de los viajeros
+    cy.get('input#nombrePasajero').type('Juan Pérez');
+    cy.get('input#apellidoPasajero').type('González');
+    cy.get('input#emailPasajero').type('juan.perez@example.com');
+    cy.get('input#telefonoPasajero').type('1234567890');
+    cy.get('input#ciudadPasajero').type('Bogotá');
+    cy.get('input#direccionPasajero').type('Calle 123 # 45-67');
+    cy.get('button#confirmarDatosPasajero').click();
+  });
+});
